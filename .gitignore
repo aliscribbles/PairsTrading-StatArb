@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Data (heavy CSVs)
+data/*.csv
+data/raw/
+data/interim/
+data/processed/
+
+# Logs and temp outputs
+logs/
+tmp/
+
+# Package metadata
+*.egg-info/
