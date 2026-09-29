@@ -4,7 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-from stat_arb.cointegration import screen_pairs, engle_granger_test, zscore_normalise, expanding_ols_beta
+from stat_arb.cointegration import (
+    screen_pairs,
+    engle_granger_test,
+    zscore_normalise,
+    expanding_ols_beta,
+)
 from stat_arb.backtest import run_backtest
 from stat_arb.signals import zscore_signals, kalman_hedge_ratio
 
@@ -56,22 +61,29 @@ def main():
     wf = expanding_ols_beta(log_prices[s1], log_prices[s2], min_periods=252)
     print(f"log_prices length: {len(log_prices)}")
     print(f"wf length: {len(wf)}, non-NaN betas: {wf['beta'].notna().sum()}")
-    print(f"first valid: {wf['beta'].first_valid_index()}, last: {wf['beta'].last_valid_index()}")
-    
+    print(
+        f"first valid: {wf['beta'].first_valid_index()}, last: {wf['beta'].last_valid_index()}"
+    )
+
     print(wf["beta"].tail())
-    print(f"final expanding beta: {wf['beta'].iloc[-1]:.6f} "f"vs full-sample {hedge_ratio:.6f}")
-    
-    
+    print(
+        f"final expanding beta: {wf['beta'].iloc[-1]:.6f} "
+        f"vs full-sample {hedge_ratio:.6f}"
+    )
+
     # --- Burn-in diagnostic: inspect BEFORE building signals ---
     fig, axes = plt.subplots(2, 1, figsize=(12, 7), sharex=True)
 
-    axes[0].plot(kalman_states["beta"], color="tab:blue", lw=1,
-                label="Kalman beta (diffuse)")
-    axes[0].plot(wf["beta"], color="green", lw=2.5, alpha=0.6,
-                label="Expanding-window OLS")
-    axes[0].axhline(hedge_ratio, color="red", ls="--", lw=1.2,
-                    label="Full-sample OLS beta")
-    axes[0].set_ylim(0.55, 1.05)          # crop the diffuse spike to zero
+    axes[0].plot(
+        kalman_states["beta"], color="tab:blue", lw=1, label="Kalman beta (diffuse)"
+    )
+    axes[0].plot(
+        wf["beta"], color="green", lw=2.5, alpha=0.6, label="Expanding-window OLS"
+    )
+    axes[0].axhline(
+        hedge_ratio, color="red", ls="--", lw=1.2, label="Full-sample OLS beta"
+    )
+    axes[0].set_ylim(0.55, 1.05)  # crop the diffuse spike to zero
     axes[0].set_title("Hedge ratio estimators")
     axes[0].legend(loc="lower right")
 
